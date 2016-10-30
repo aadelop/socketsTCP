@@ -62,7 +62,7 @@ int main (int argc, char * argv[]){
       exit(-1);
    }
 
-   if ((numbytes=recv(fd,buf,MAXDATASIZE,0)) == -1){  
+   if ((numbytes=read(fd,buf,MAXDATASIZE)) == -1){  
       /* llamada a recv() */
       perror(" error Error \n");
       exit(-1);

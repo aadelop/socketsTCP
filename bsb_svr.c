@@ -112,9 +112,8 @@ int main (int argc, char * argv[]){
              inet_ntoa(client.sin_addr) ); 
       /* que mostrará la IP del cliente */
 
-      send(fd2,"Bienvenido a mi servidor.\n",25,0); 
+      write(fd2,"Bienvenido a mi servidor.\n",25); 
       /* que enviará el mensaje de bienvenida al cliente */
-
       close(fd2); /* cierra fd2 */
    }
 
