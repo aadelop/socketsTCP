@@ -9,4 +9,4 @@ bsb_svr : bsb_svr.c
 bsb_cli : bsb_cli.c 
 	$(CC) $(CFLAGS) -o bsb_cli bsb_cli.c
 
-clear :rm *.o
+clear :rm *.o 

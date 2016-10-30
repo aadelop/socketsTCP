@@ -16,6 +16,7 @@ typedef struct{
     char option;
     int code;
     int money;
+    char message[60];
 } transaction;
 
 
@@ -28,13 +29,12 @@ int main (int argc, char * argv[]){
    else{
 
     int  port = atoi(argv[4]);
-    char op = * argv [6];
     int userCode = atoi(argv[8]);  
     transaction buff;
-    buff.option = * argv[6];
-    buff.code = userCode;
-    buff.money = 1;
+      buff.option = * argv[6];
+      buff.code = userCode;
 
+    char * c_time_string;
     int fd, numbytes;
 
    /* ficheros descriptores */
@@ -75,16 +75,31 @@ int main (int argc, char * argv[]){
       exit(-1);
    }
 
+   /*Comunicacion y primer envio infromacion al servidor*/
+   /* se envia el buff para informar, codigo usuario, tipo operacion*/
    if ((numbytes=write(fd,&buff,sizeof(buff))) == -1){  
       /* llamada a recv() */
       perror(" error Error \n");
       exit(-1);
    }
 
-   //buf[numbytes]='\0';
+  switch(buff.option){
+    case 'd':
+       printf ("Bienvenido usuario, ingrese la cantidad a depositar: "); //
+       break;
 
-   //printf("Mensaje del Servidor: %s\n",buff); 
-   /* muestra el mensaje de bienvenida del servidor =) */
+    case 'r':
+       printf ("Bienvenido usuario, ingrese la cantidad a retirar: "); //
+       break;
+   }
+       //Interaccion del cajero con la central bancaria.
+       scanf("%d",&buff.money);//Se lee la cantidad de dinero a depositar/retirar 
+       write(fd,&buff.money, sizeof(buff.money)); //se envia la cantidad al servidor
+       read(fd,buff.message,100); //lectura del ticket comprobante
+       printf("Transaccion realizada con exito\n");
+       printf("Ticket: \n");
+       printf("       Codigo: %d, Operacion: %c, Fecha: %s",buff.code, buff.option, buff.message);
+
 
    close(fd);   /* cerramos fd =) */
     
