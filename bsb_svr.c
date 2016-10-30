@@ -56,47 +56,6 @@ int main (int argc, char * argv[]){
         }
         i++;
       }     
-        /*
-        if (strcmp(argv[1],"-l")==0){
-            printf ("primer if \n");
-            printf ("%s\n",argv[1]);
-            port = atoi(argv[2]);
-            if (strcmp(argv[3],"-i")==0){
-                fname_dep = argv[4];
-                fname_ret = argv[6];
-            }
-            else{
-                fname_dep = argv[6];
-                fname_ret = argv[4];
-
-            }
-        }       
-        else if (strcmp(argv[1],"-i")==0){
-            printf("segundo if\n");
-            fname_dep = argv[2]; 
-            if (strcmp(argv[3],"-l")==0){
-                port = atoi(argv[4]);
-                fname_ret = argv[6];
-            }
-            else{
-                port = atoi(argv[6]);
-                fname_ret = argv[4];
-
-            } 
-        }
-        else if (strcmp(argv[1],"-o")==0){
-            printf("tercer if\n");
-            fname_ret = argv[2];   
-            if (strcmp(argv[3],"-l")==0){ 
-                port = atoi(argv[4]);  
-                fname_dep = argv[6];
-            }
-            else{
-                port = atoi(argv[6]); 
-                fname_dep = argv[4];
-
-            }
-        } */
     }
     
 
