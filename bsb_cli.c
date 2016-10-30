@@ -12,6 +12,13 @@
 #define MAXDATASIZE 100   
 /* El número máximo de datos en bytes */
 
+typedef struct{
+    char option;
+    int code;
+    int money;
+} transaction;
+
+
 int main (int argc, char * argv[]){
     
    if (argc != 9){
@@ -23,7 +30,13 @@ int main (int argc, char * argv[]){
     int  port = atoi(argv[4]);
     char op = * argv [6];
     int userCode = atoi(argv[8]);  
-    int fd, numbytes;       
+    transaction buff;
+    buff.option = * argv[6];
+    buff.code = userCode;
+    buff.money = 1;
+
+    int fd, numbytes;
+
    /* ficheros descriptores */
 
     char buf[MAXDATASIZE];  
@@ -62,17 +75,15 @@ int main (int argc, char * argv[]){
       exit(-1);
    }
 
-   if ((numbytes=read(fd,buf,MAXDATASIZE)) == -1){  
+   if ((numbytes=write(fd,&buff,sizeof(buff))) == -1){  
       /* llamada a recv() */
       perror(" error Error \n");
       exit(-1);
    }
 
-   
+   //buf[numbytes]='\0';
 
-   buf[numbytes]='\0';
-
-   printf("Mensaje del Servidor: %s\n",buf); 
+   //printf("Mensaje del Servidor: %s\n",buff); 
    /* muestra el mensaje de bienvenida del servidor =) */
 
    close(fd);   /* cerramos fd =) */

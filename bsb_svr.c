@@ -10,10 +10,18 @@
 
 #define BACKLOG 2 /* El número de conexiones permitidas */
 
+typedef struct{
+    char option;
+    int code;
+    int money;
+} transaction;
+
 int main (int argc, char * argv[]){
-	int  port;
-	char * bit_deposito;
-	char * bit_retiro;  
+	 int  port;
+   int numbytes;
+   transaction buff;
+	 char * bit_deposito;
+	 char * bit_retiro;  
     
     int fd, fd2; /* los ficheros descriptores */
 
@@ -108,12 +116,16 @@ int main (int argc, char * argv[]){
          exit(-1);
       }
 
+   if (numbytes=(read(fd2,&buff,100) == -1)){  
+      perror(" error Error \n");
+      exit(-1);
+    }
+      
       printf("Se obtuvo una conexión desde %s\n",
              inet_ntoa(client.sin_addr) ); 
       /* que mostrará la IP del cliente */
+      printf("operacion de usuario : %c \n" ,buff.option);
 
-      write(fd2,"Bienvenido a mi servidor.\n",25); 
-      /* que enviará el mensaje de bienvenida al cliente */
       close(fd2); /* cierra fd2 */
    }
 
