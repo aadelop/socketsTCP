@@ -55,6 +55,7 @@ int main (int argc, char * argv[]){
       exit(-1);
    }
 
+
    if ((fd=socket(AF_INET, SOCK_STREAM, 0))==-1){  
       /* llamada a socket() */
       perror("error en socket()\n");
@@ -100,8 +101,8 @@ int main (int argc, char * argv[]){
        printf("Ticket: \n");
        printf("       Codigo: %d, Operacion: %c, Fecha: %s",buff.code, buff.option, buff.message);
 
-
    close(fd);   /* cerramos fd =) */
+
     
    }
 

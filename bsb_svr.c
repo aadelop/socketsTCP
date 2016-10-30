@@ -20,7 +20,7 @@ typedef struct{
 } transaction;
 
 int main (int argc, char * argv[]){
-	 int  port,numbytes;
+	 int  port,numbytes,i;
    int totalMoney = 80000;
    transaction buff;
    char * fname_dep;
@@ -31,19 +31,32 @@ int main (int argc, char * argv[]){
    time_t current_time;
    char * c_time_string;
 
-   int fd, fd2; /* los ficheros descriptores */
+   int fd, fd2,sin_size;
+    /* los ficheros descriptores */
 
    struct sockaddr_in server; 
    /* para la información de la dirección del servidor */
 
    struct sockaddr_in client; 
-   /* para la información de la dirección del cliente */
-   int sin_size;
-    
+
     if (argc != 7){
         printf("Argumentos incompletos, %d de 6 esperados\n", argc-1);
     }
     else {
+      i=0;
+      while( i< 6 ) {
+        if (strcmp(argv[i],"-l")==0){
+          port = atoi(argv[i+1]);
+        }
+        else if (strcmp(argv[i],"-i")==0){
+          fname_dep = argv[i+1];
+        }
+        else if (strcmp(argv[i],"-o")==0){
+          fname_ret = argv [i+1];
+        }
+        i++;
+      }     
+        /*
         if (strcmp(argv[1],"-l")==0){
             printf ("primer if \n");
             printf ("%s\n",argv[1]);
@@ -83,7 +96,7 @@ int main (int argc, char * argv[]){
                 fname_dep = argv[4];
 
             }
-        } 
+        } */
     }
     
 
@@ -142,6 +155,9 @@ int main (int argc, char * argv[]){
             read(fd2,&buff.money,100);
             totalMoney += buff.money;
             bit_dep = fopen(fname_dep,"r+");//solo si existe archivo, añadir fopen +w si no existe 
+            
+            if (bit_dep == NULL )
+              bit_dep = fopen(fname_dep,"w+");   
             current_time = time(NULL);
             c_time_string = ctime(&current_time);
             fseek(bit_dep,0,SEEK_END);
@@ -156,21 +172,24 @@ int main (int argc, char * argv[]){
             read(fd2,&buff.money,100);
             totalMoney -= buff.money;
             bit_ret = fopen(fname_ret,"r+"); //solo si existe archivo, añadir fopen +w si no existe 
+            if (bit_ret == NULL)
+              bit_ret = fopen(fname_ret,"w+");
             current_time = time(NULL);
             c_time_string = ctime(&current_time);
-            fseek(bit_dep,0,SEEK_END);
+            fseek(bit_ret,0,SEEK_END);
             fprintf(bit_ret, "usuario: %d, evento: %c, monto actual: %d, fecha: %s",
                                   buff.code, buff.option,totalMoney, c_time_string);
             fclose(bit_ret);
             strcpy(buff.message,c_time_string);
             write(fd2,buff.message,sizeof(buff.message));
+            break;
 
         default:
             printf("invalid option\n");
 
     }
-
       close(fd2); /* cierra fd2 */
+
   }
 
 }
