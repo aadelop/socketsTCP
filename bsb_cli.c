@@ -69,11 +69,16 @@ int main (int argc, char * argv[]){
    /*he->h_addr pasa la información de ``*he'' a "h_addr" */
    bzero(&(server.sin_zero),8);
 
-   if(connect(fd, (struct sockaddr *)&server,
-      sizeof(struct sockaddr))==-1){ 
+   int count = 0;
+   int temp = -1;
+   while(temp = (connect(fd, (struct sockaddr *)&server,
+      sizeof(struct sockaddr)))==-1 || count >= 3){ 
       /* llamada a connect() */
-      perror("error en connect()\n");
-      exit(-1);
+      count += 1;
+      if (count == 3){
+          perror("Agotado tiempo de espera, error en connect()\n");
+          exit(-1);
+      }
    }
 
    /*Comunicacion y primer envio infromacion al servidor*/
