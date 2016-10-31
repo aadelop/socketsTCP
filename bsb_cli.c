@@ -22,17 +22,11 @@ typedef struct{
 
 int main (int argc, char * argv[]){
     
-   if (argc != 9){
-      printf("Argumentos incompletos, %d de 8 esperados\n", argc-1);
-   }
-
-   else{
-
-    int  port = atoi(argv[4]);
-    int userCode = atoi(argv[8]);  
+    int  port;
+    char * modulo; 
     transaction buff;
-      buff.option = * argv[6];
-      buff.code = userCode;
+      buff.option;
+      buff.code;
 
     char * c_time_string;
     int fd, numbytes;
@@ -46,10 +40,35 @@ int main (int argc, char * argv[]){
    /* estructura que recibirá información sobre el nodo remoto */
 
     struct sockaddr_in server;  
+   
+   if (argc != 9){
+      printf("Argumentos incompletos, %d de 8 esperados\n", argc-1);
+   }
+
+   else{
+   int i = 1;
+
+    while( i < 8 ) {
+      if (strcmp(argv[i],"-d")==0){
+        modulo = (argv[i+1]);
+      }
+      else if (strcmp(argv[i],"-p")==0){
+        port = atoi(argv[i+1]);
+      }
+      else if (strcmp(argv[i],"-c")==0){
+        buff.option = * argv [i+1];
+      }
+      else if (strcmp(argv[i],"-i")==0){
+        buff.code = atoi(argv[i+1]);
+      }
+      i++;
+    }
+  }
+  
    /* información sobre la dirección del servidor */
 
 
-   if ((he=gethostbyname(argv[2]))==NULL){       
+   if ((he=gethostbyname(modulo))==NULL){       
       /* llamada a gethostbyname() */
       perror("error en gethostbyname()\n");
       exit(-1);
@@ -71,15 +90,24 @@ int main (int argc, char * argv[]){
 
    int count = 0;
    int temp = -1;
-   while(temp = (connect(fd, (struct sockaddr *)&server,
+
+   printf("imprime direccion %s\n",modulo);
+   if(connect(fd, (struct sockaddr *)&server,
+       sizeof(struct sockaddr))==-1){
+          perror("Agotado tiempo de espera, error en connect()\n");
+          exit(-1);
+    }
+   /*
+   while((temp = connect(fd, (struct sockaddr *)&server,
       sizeof(struct sockaddr)))==-1 || count >= 3){ 
-      /* llamada a connect() */
+      //llamada a connect() 
       count += 1;
       if (count == 3){
           perror("Agotado tiempo de espera, error en connect()\n");
           exit(-1);
       }
    }
+   */
 
    /*Comunicacion y primer envio infromacion al servidor*/
    /* se envia el buff para informar, codigo usuario, tipo operacion*/
@@ -107,8 +135,4 @@ int main (int argc, char * argv[]){
        printf("       Codigo: %d, Operacion: %c, Fecha: %s",buff.code, buff.option, buff.message);
 
    close(fd);   /* cerramos fd =) */
-
-    
-   }
-
 }
